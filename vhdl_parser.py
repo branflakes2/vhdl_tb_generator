@@ -97,6 +97,15 @@ def signal_string(ports):
         ret += line + '\n'
     return ret 
 
+def port_map(ports, entity_name):
+    ret = "\tpm : " + entity_name + " port map("
+    for i in range(0, len(ports) - 1):
+        ret += ports[i].name + ", "
+    ret += ports[len(ports) - 1].name + ");"
+    return ret
+
+def process(ports, entity_name)
+
 def main():
     filename = "count_decoder.vhd"
     entity_string = get_entity(filename)
@@ -104,5 +113,6 @@ def main():
     ports = create_ports(entity_string)
     print(st.tabs_to_spaces(component_string(entity_name, ports)))
     print(st.tabs_to_spaces(signal_string(ports)))
+    print(st.tabs_to_spaces(port_map(ports, entity_name)))
 
 main()
