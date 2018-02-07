@@ -5,7 +5,7 @@ use IEEE.std_logic_1164.all;
 entity count_decoder is
 
 port(
-    bus_size    :   in  std_logic_vector(1 downto 0);
+    bus_sizeaaaaaaaaaaaaaaa    :   in  std_logic_vector(1 downto 0);
     input_size  :   in  std_logic_vector(3 downto 0);
     num_clks    :   out std_logic_vector(1 downto 0)
 );

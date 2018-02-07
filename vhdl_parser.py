@@ -58,35 +58,51 @@ def entity_test_string(entity_name):
     return "entity " + entity_name + "_test is\nend " + entity_name + "_test;"
 
 def component_string(entity_name, ports):
-    ret = "    component " + entity_name + "\n    port(\n"
+    ret = "\tcomponent " + entity_name + "\n\tport(\n"
     port_num = 1 
     for port in ports:
         if port.data_type == "std_logic_vector":
             upper_bound = port.size - 1
-            ret += st.tabs_to_spaces("\t\t" + port.name + "\t:\t" + port.direction + "\tstd_logic_vector(" + str(upper_bound) + " downto 0)")
+            ret += "\t\t" + port.name + "\t:\t" + port.direction + "\tstd_logic_vector(" + str(upper_bound) + " downto 0)"
         else:
-            ret += st.tabs_to_spaces("\t\t" + port.name + "\t:\t" + port.direction + "\tstd_logic")
+            ret += "\t\t" + port.name + "\t:\t" + port.direction + "\tstd_logic"
         if port_num != len(ports):
             ret += ";\n"
         else:
             ret += "\n"
-            ret += st.tabs_to_spaces("\t);\n")
-            ret += st.tabs_to_spaces("\tend component;\n")
+            ret += "\t);\n"
+            ret += "\tend component;\n"
         port_num += 1
+
+    #allign tabs of port declaration
+    split = ret.split('\n')
+    split[2:(2 + len(ports))] = st.allign_tabs(split[2:(2 + len(ports))])
+    ret = ""
+    for line in split:
+        ret += line + '\n'
     return ret
 
 def signal_string(ports):
     ret = ""
     for port in ports:
-        ret += st.tabs_to_spaces("signal\ts_" + port.name + "\t:\t" + port.data_type + ";\n")
+        if port.data_type == "std_logic_vector":
+            upper_bound = port.size - 1
+            ret += "\tsignal\ts_" + port.name + "\t:\t" + port.data_type + "(" + str(upper_bound) + " downto 0);\n"
+        else:
+            ret += "\tsignal\ts_" + port.name + "\t:\t" + port.data_type + ";\n"
+    split = ret.rstrip().split('\n')
+    split = st.allign_tabs(split)
+    ret = ""
+    for line in split:
+        ret += line + '\n'
     return ret 
-            
+
 def main():
     filename = "count_decoder.vhd"
     entity_string = get_entity(filename)
     entity_name = get_entity_name(entity_string)
     ports = create_ports(entity_string)
-    print(component_string(entity_name, ports))
-    print(signal_string(ports))
+    print(st.tabs_to_spaces(component_string(entity_name, ports)))
+    print(st.tabs_to_spaces(signal_string(ports)))
 
 main()
